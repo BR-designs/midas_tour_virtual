@@ -18,20 +18,20 @@
     }
 
     #panorama {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100vw;
-  height: 100vh;
-  z-index: 1;
-}
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 1;
+    }
 
-.pano-layer {
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%;
-  height: 100%;
-  transition: opacity 0.6s ease, transform 0.6s ease;
-}
+    .pano-layer {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
 
     .sidebar {
       position: fixed;
@@ -484,150 +484,81 @@
     }
 
     function loadRoom(roomId) {
-  const room = currentImovel.rooms.find(r => r.id === roomId);
-  if (!room) return;
+      const room = currentImovel.rooms.find(r => r.id === roomId);
+      if (!room) return;
 
-  document.getElementById('roomLabel').textContent = room.label;
-  document.querySelectorAll('.room-item').forEach(el => el.classList.remove('active'));
-  const activeItem = document.getElementById('item-' + roomId);
-  if (activeItem) activeItem.classList.add('active');
-
-  const panoramaEl = document.getElementById('panorama');
-
-  // Cria novo layer para o próximo ambiente
-  const newLayer = document.createElement('div');
-  newLayer.className = 'pano-layer';
-  newLayer.style.opacity = '0';
-  newLayer.style.transform = 'scale(0.95)';
-  newLayer.style.zIndex = '2';
-  panoramaEl.appendChild(newLayer);
-
-  const hotspots = room.hotspots.map(hs => ({
-    pitch: hs.pitch,
-    yaw: hs.yaw,
-    type: 'custom',
-    cssClass: 'midas-hs-container',
-    createTooltipFunc: (container) => {
-      const el = criarHotspotElement(hs.label, () => loadRoom(hs.targetId));
-      container.appendChild(el);
-      container.style.width = '64px';
-      container.style.height = '64px';
-      container.style.marginTop = '-32px';
-      container.style.marginLeft = '-32px';
-      container.style.cursor = 'pointer';
-    }
-  }));
-
-  // Carrega o novo viewer no novo layer
-  const newViewer = pannellum.viewer(newLayer, {
-    type: 'equirectangular',
-    panorama: room.image,
-    autoLoad: true,
-    autoRotate: -1.5,
-    compass: false,
-    showFullscreenCtrl: false,
-    showZoomCtrl: false,
-    mouseZoom: true,
-    pitch: room.pitch,
-    yaw: room.yaw,
-    hfov: 100,
-    hotSpots: hotspots,
-    uiText: {
-      loadButtonLabel: 'Carregar Tour',
-      loadingLabel: 'Carregando...',
-      bylineLabel: '',
-      noPanoramaError: 'Imagem não encontrada.',
-      fileAccessError: 'Não foi possível carregar a imagem.',
-      malformedURLError: 'URL inválida.',
-      genericWebGLError: 'Erro ao carregar o visualizador.',
-      textureSizeError: 'Imagem muito grande para este dispositivo.',
-      unknownError: 'Erro desconhecido.'
-    }
-  });
-
-  newViewer.on('load', () => {
-    // Zoom out no layer atual enquanto o novo aparece com zoom in
-    const oldLayers = panoramaEl.querySelectorAll('.pano-layer:not(:last-child)');
-    oldLayers.forEach(layer => {
-      layer.style.transform = 'scale(1.08)';
-      layer.style.opacity = '0';
-    });
-
-    // Novo layer aparece suavemente
-    newLayer.style.opacity = '1';
-    newLayer.style.transform = 'scale(1)';
-
-    // Remove layers antigos e troca o viewer após a transição
-    setTimeout(() => {
-      oldLayers.forEach(layer => layer.remove());
-      if (viewer) { viewer.destroy(); viewer = null; }
-      viewer = newViewer;
-    }, 650);
-  });
-}
+      document.getElementById('roomLabel').textContent = room.label;
+      document.querySelectorAll('.room-item').forEach(el => el.classList.remove('active'));
+      const activeItem = document.getElementById('item-' + roomId);
+      if (activeItem) activeItem.classList.add('active');
 
       const panoramaEl = document.getElementById('panorama');
-      panoramaEl.style.transform = 'scale(1.08)';
-      panoramaEl.style.opacity = '0';
-      overlay.style.opacity = '0.85';
 
-      setTimeout(() => {
-        document.getElementById('roomLabel').textContent = room.label;
-        document.querySelectorAll('.room-item').forEach(el => el.classList.remove('active'));
-        const activeItem = document.getElementById('item-' + roomId);
-        if (activeItem) activeItem.classList.add('active');
+      const newLayer = document.createElement('div');
+      newLayer.className = 'pano-layer';
+      newLayer.style.opacity = '0';
+      newLayer.style.transform = 'scale(0.95)';
+      newLayer.style.zIndex = '2';
+      panoramaEl.appendChild(newLayer);
 
-        if (viewer) { viewer.destroy(); viewer = null; }
+      const hotspots = room.hotspots.map(hs => ({
+        pitch: hs.pitch,
+        yaw: hs.yaw,
+        type: 'custom',
+        cssClass: 'midas-hs-container',
+        createTooltipFunc: (container) => {
+          const el = criarHotspotElement(hs.label, () => loadRoom(hs.targetId));
+          container.appendChild(el);
+          container.style.width = '64px';
+          container.style.height = '64px';
+          container.style.marginTop = '-32px';
+          container.style.marginLeft = '-32px';
+          container.style.cursor = 'pointer';
+        }
+      }));
 
-        const hotspots = room.hotspots.map(hs => ({
-          pitch: hs.pitch,
-          yaw: hs.yaw,
-          type: 'custom',
-          cssClass: 'midas-hs-container',
-          createTooltipFunc: (container) => {
-            const el = criarHotspotElement(hs.label, () => loadRoom(hs.targetId));
-            container.appendChild(el);
-            container.style.width = '64px';
-            container.style.height = '64px';
-            container.style.marginTop = '-32px';
-            container.style.marginLeft = '-32px';
-            container.style.cursor = 'pointer';
-          }
-        }));
+      const newViewer = pannellum.viewer(newLayer, {
+        type: 'equirectangular',
+        panorama: room.image,
+        autoLoad: true,
+        autoRotate: -1.5,
+        compass: false,
+        showFullscreenCtrl: false,
+        showZoomCtrl: false,
+        mouseZoom: true,
+        pitch: room.pitch,
+        yaw: room.yaw,
+        hfov: 100,
+        hotSpots: hotspots,
+        uiText: {
+          loadButtonLabel: 'Carregar Tour',
+          loadingLabel: 'Carregando...',
+          bylineLabel: '',
+          noPanoramaError: 'Imagem não encontrada.',
+          fileAccessError: 'Não foi possível carregar a imagem.',
+          malformedURLError: 'URL inválida.',
+          genericWebGLError: 'Erro ao carregar o visualizador.',
+          textureSizeError: 'Imagem muito grande para este dispositivo.',
+          unknownError: 'Erro desconhecido.'
+        }
+      });
 
-        viewer = pannellum.viewer('panorama', {
-          type: 'equirectangular',
-          panorama: room.image,
-          autoLoad: true,
-          autoRotate: -1.5,
-          compass: false,
-          showFullscreenCtrl: false,
-          showZoomCtrl: false,
-          mouseZoom: true,
-          pitch: room.pitch,
-          yaw: room.yaw,
-          hfov: 100,
-          hotSpots: hotspots,
-          uiText: {
-            loadButtonLabel: 'Carregar Tour',
-            loadingLabel: 'Carregando...',
-            bylineLabel: '',
-            noPanoramaError: 'Imagem não encontrada.',
-            fileAccessError: 'Não foi possível carregar a imagem.',
-            malformedURLError: 'URL inválida.',
-            genericWebGLError: 'Erro ao carregar o visualizador.',
-            textureSizeError: 'Imagem muito grande para este dispositivo.',
-            unknownError: 'Erro desconhecido.'
-          }
+      newViewer.on('load', () => {
+        const oldLayers = panoramaEl.querySelectorAll('.pano-layer:not(:last-child)');
+        oldLayers.forEach(layer => {
+          layer.style.transform = 'scale(1.08)';
+          layer.style.opacity = '0';
         });
 
-        viewer.on('load', () => {
-          panoramaEl.style.transform = 'scale(1)';
-          panoramaEl.style.opacity = '1';
-          overlay.style.opacity = '0';
-        });
+        newLayer.style.opacity = '1';
+        newLayer.style.transform = 'scale(1)';
 
-      }, 350);
+        setTimeout(() => {
+          oldLayers.forEach(layer => layer.remove());
+          if (viewer) { viewer.destroy(); viewer = null; }
+          viewer = newViewer;
+        }, 650);
+      });
     }
 
     function toggleSidebar() {
