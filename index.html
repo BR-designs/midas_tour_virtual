@@ -23,9 +23,9 @@
       width: 100vw;
       height: 100vh;
       z-index: 1;
+      transition: transform 0.35s ease, opacity 0.35s ease;
     }
 
-    /* ── SIDEBAR ── */
     .sidebar {
       position: fixed;
       top: 0; right: 0;
@@ -55,11 +55,7 @@
       width: 100%;
     }
 
-    .sidebar-logo svg {
-      width: 54px;
-      height: auto;
-      filter: drop-shadow(0 0 8px rgba(254,175,0,0.45));
-    }
+    .sidebar-logo img { width: 54px; height: auto; }
 
     .sidebar-logo .brand {
       font-size: 0.9rem;
@@ -69,10 +65,7 @@
       line-height: 1.3;
     }
 
-    .sidebar-logo .brand em {
-      color: #FEAF00;
-      font-style: normal;
-    }
+    .sidebar-logo .brand em { color: #FEAF00; font-style: normal; }
 
     .sidebar-logo .sub {
       font-size: 0.62rem;
@@ -212,7 +205,6 @@
       letter-spacing: 0.05em;
     }
 
-    /* ── SETAS — construídas via JS, estilo definido aqui ── */
     @keyframes pulse-ring {
       0%   { transform: translate(-50%, -50%) scale(1);   opacity: 0.8; }
       100% { transform: translate(-50%, -50%) scale(1.9); opacity: 0;   }
@@ -245,7 +237,6 @@
       transform: scale(1.12);
     }
 
-    /* Anel pulsante */
     .midas-hotspot .ring {
       position: absolute;
       width: 100%;
@@ -256,7 +247,6 @@
       animation: pulse-ring 1.8s ease-out infinite;
     }
 
-    /* Seta SVG interna */
     .midas-hotspot svg {
       width: 22px;
       height: 22px;
@@ -266,7 +256,6 @@
       z-index: 1;
     }
 
-    /* Label do destino */
     .midas-hotspot .hs-label {
       position: absolute;
       bottom: -26px;
@@ -302,17 +291,8 @@
   <button class="sidebar-toggle" onclick="toggleSidebar()">☰</button>
 
   <div class="sidebar" id="sidebar">
-
-    <!-- LOGO MIDAS como SVG inline (funciona sem servidor) -->
     <div class="sidebar-logo">
-  <img src="Iso_Midas_sem_fundo.png" alt="Midas Imobiliária" />
-        <!-- Haste esquerda vertical -->
-        <rect x="20" y="20" width="90" height="390" fill="#FEAF00"/>
-        <!-- Braço esquerdo diagonal -->
-        <polygon points="20,20 110,20 280,220 220,280" fill="#FEAF00"/>
-        <!-- Braço direito diagonal -->
-        <polygon points="480,20 390,20 220,220 280,280" fill="#FEAF00"/>
-      </svg>
+      <img src="Iso_Midas_sem_fundo.png" alt="Midas Imobiliária" />
       <div class="brand"><em>Midas</em> Imobiliária<br>Inteligente</div>
       <div class="sub">Tour Virtual 360°</div>
     </div>
@@ -333,133 +313,118 @@
         💬 Falar com Corretor
       </a>
     </div>
-
   </div>
 
   <script>
-    // ═══════════════════════════════════════════════════
-    // CONFIGURAÇÃO DOS IMÓVEIS
-    // ═══════════════════════════════════════════════════
     const imoveis = {
-    'escritorio-midas': {
-    name: 'Escritório Midas',
-    location: 'Castanhal, PA',
-    whatsapp: '559100000000',
-    rooms: [
-        {
+      'escritorio-midas': {
+        name: 'Escritório Midas',
+        location: 'Belém, PA',
+        whatsapp: '559100000000',
+        rooms: [
+          {
             id: 'recepcao',
             label: 'Recepção',
             image: 'IMG_6649.JPG.jpeg',
-            pitch: 0,
-            yaw: 0,
+            pitch: 0, yaw: 0,
             hotspots: [
-                { targetId: 'sala-principal', pitch: -8, yaw: -15, label: 'Sala Principal' },
-                { targetId: 'area-trabalho', pitch: -8, yaw: 0, label: 'Área de Trabalho' }
+              { targetId: 'sala-principal', pitch: -8, yaw: -15, label: 'Sala Principal' },
+              { targetId: 'area-trabalho',  pitch: -8, yaw: 0,   label: 'Área de Trabalho' }
             ]
-        },
-        {
+          },
+          {
             id: 'sala-principal',
             label: 'Sala Principal',
             image: 'IMG_6650.JPG.jpeg',
-            pitch: 0,
-            yaw: 0,
+            pitch: 0, yaw: 0,
             hotspots: [
-                { targetId: 'recepcao', pitch: -8, yaw: 210, label: 'Recepção' },
-                { targetId: 'area-trabalho', pitch: -8, yaw: 110, label: 'Área de Trabalho' }
+              { targetId: 'recepcao',      pitch: -8, yaw: 210, label: 'Recepção' },
+              { targetId: 'area-trabalho', pitch: -8, yaw: 110, label: 'Área de Trabalho' }
             ]
-        },
-        {
+          },
+          {
             id: 'area-trabalho',
             label: 'Área de Trabalho',
             image: 'IMG_6651.JPG.jpeg',
-            pitch: 0,
-            yaw: 0,
-            hotspots: [
-                { targetId: 'recepcao', pitch: -8, yaw: 180, label: 'Recepção' },
-                { targetId: 'sala-principal', pitch: -8, yaw: 0, label: 'Sala Principal' }
-            ]
-        }
-    ]
-},
-      "residencial-castanhal": {
-        name: "Residencial Castanhal Prime",
-        location: "Castanhal – PA",
-        whatsapp: "559100000000",
-        rooms: [
-          {
-            id: "sala",
-            label: "Sala de Estar",
-            image: "https://pannellum.org/images/alma.jpg",
             pitch: 0, yaw: 0,
             hotspots: [
-              { targetId: "cozinha", pitch: -8, yaw: 90,  label: "Cozinha"         },
-              { targetId: "quarto",  pitch: -8, yaw: 200, label: "Quarto Principal" }
-            ]
-          },
-          {
-            id: "cozinha",
-            label: "Cozinha",
-            image: "https://pannellum.org/images/jfk.jpg",
-            pitch: 0, yaw: 0,
-            hotspots: [
-              { targetId: "sala",         pitch: -8, yaw: 270, label: "Sala de Estar" },
-              { targetId: "area-externa", pitch: -8, yaw: 90,  label: "Área Externa"  }
-            ]
-          },
-          {
-            id: "quarto",
-            label: "Quarto Principal",
-            image: "https://pannellum.org/images/bma-1.jpg",
-            pitch: 0, yaw: 0,
-            hotspots: [
-              { targetId: "sala", pitch: -8, yaw: 180, label: "Sala de Estar" }
-            ]
-          },
-          {
-            id: "area-externa",
-            label: "Área Externa",
-            image: "https://pannellum.org/images/cerro-toco.jpg",
-            pitch: 0, yaw: 0,
-            hotspots: [
-              { targetId: "cozinha", pitch: -8, yaw: 180, label: "Cozinha" }
+              { targetId: 'recepcao',       pitch: -8, yaw: 180, label: 'Recepção' },
+              { targetId: 'sala-principal', pitch: -8, yaw: 0,   label: 'Sala Principal' }
             ]
           }
         ]
       },
 
-      "casa-benevides": {
-        name: "Casa em Benevides",
-        location: "Benevides – PA",
-        whatsapp: "559100000000",
+      'residencial-castanhal': {
+        name: 'Residencial Castanhal Prime',
+        location: 'Castanhal – PA',
+        whatsapp: '559100000000',
         rooms: [
           {
-            id: "sala",
-            label: "Sala",
-            image: "https://pannellum.org/images/cerro-toco.jpg",
+            id: 'sala', label: 'Sala de Estar',
+            image: 'https://pannellum.org/images/alma.jpg',
             pitch: 0, yaw: 0,
             hotspots: [
-              { targetId: "varanda", pitch: -8, yaw: 120, label: "Varanda" }
+              { targetId: 'cozinha', pitch: -8, yaw: 90,  label: 'Cozinha' },
+              { targetId: 'quarto',  pitch: -8, yaw: 200, label: 'Quarto Principal' }
             ]
           },
           {
-            id: "varanda",
-            label: "Varanda",
-            image: "https://pannellum.org/images/alma.jpg",
+            id: 'cozinha', label: 'Cozinha',
+            image: 'https://pannellum.org/images/jfk.jpg',
             pitch: 0, yaw: 0,
             hotspots: [
-              { targetId: "sala", pitch: -8, yaw: 300, label: "Sala" }
+              { targetId: 'sala',         pitch: -8, yaw: 270, label: 'Sala de Estar' },
+              { targetId: 'area-externa', pitch: -8, yaw: 90,  label: 'Área Externa' }
+            ]
+          },
+          {
+            id: 'quarto', label: 'Quarto Principal',
+            image: 'https://pannellum.org/images/bma-1.jpg',
+            pitch: 0, yaw: 0,
+            hotspots: [
+              { targetId: 'sala', pitch: -8, yaw: 180, label: 'Sala de Estar' }
+            ]
+          },
+          {
+            id: 'area-externa', label: 'Área Externa',
+            image: 'https://pannellum.org/images/cerro-toco.jpg',
+            pitch: 0, yaw: 0,
+            hotspots: [
+              { targetId: 'cozinha', pitch: -8, yaw: 180, label: 'Cozinha' }
+            ]
+          }
+        ]
+      },
+
+      'casa-benevides': {
+        name: 'Casa em Benevides',
+        location: 'Benevides – PA',
+        whatsapp: '559100000000',
+        rooms: [
+          {
+            id: 'sala', label: 'Sala',
+            image: 'https://pannellum.org/images/cerro-toco.jpg',
+            pitch: 0, yaw: 0,
+            hotspots: [
+              { targetId: 'varanda', pitch: -8, yaw: 120, label: 'Varanda' }
+            ]
+          },
+          {
+            id: 'varanda', label: 'Varanda',
+            image: 'https://pannellum.org/images/alma.jpg',
+            pitch: 0, yaw: 0,
+            hotspots: [
+              { targetId: 'sala', pitch: -8, yaw: 300, label: 'Sala' }
             ]
           }
         ]
       }
     };
 
-    // ═══════════════════════════════════════════════════
-    // LÓGICA
-    // ═══════════════════════════════════════════════════
     function getImovelId() {
       const params = new URLSearchParams(window.location.search);
-      return params.get("imovel") || Object.keys(imoveis)[0];
+      return params.get('imovel') || Object.keys(imoveis)[0];
     }
 
     let viewer = null;
@@ -468,17 +433,17 @@
     function loadImovel(imovelId) {
       currentImovel = imoveis[imovelId] || imoveis[Object.keys(imoveis)[0]];
 
-      document.getElementById("propName").textContent = currentImovel.name;
-      document.getElementById("propLocation").textContent = "📍 " + currentImovel.location;
-      document.getElementById("waBtn").href =
+      document.getElementById('propName').textContent = currentImovel.name;
+      document.getElementById('propLocation').textContent = '📍 ' + currentImovel.location;
+      document.getElementById('waBtn').href =
         `https://wa.me/${currentImovel.whatsapp}?text=Olá!%20Vi%20o%20tour%20virtual%20do%20imóvel%20${encodeURIComponent(currentImovel.name)}%20e%20tenho%20interesse.`;
 
-      const roomList = document.getElementById("roomList");
-      roomList.innerHTML = "";
+      const roomList = document.getElementById('roomList');
+      roomList.innerHTML = '';
       currentImovel.rooms.forEach(room => {
-        const item = document.createElement("div");
-        item.className = "room-item";
-        item.id = "item-" + room.id;
+        const item = document.createElement('div');
+        item.className = 'room-item';
+        item.id = 'item-' + room.id;
         item.innerHTML = `<div class="room-dot"></div>${room.label}`;
         item.onclick = () => loadRoom(room.id);
         roomList.appendChild(item);
@@ -488,151 +453,116 @@
     }
 
     function criarHotspotElement(label, onClickFn) {
-      const wrapper = document.createElement("div");
-      wrapper.className = "midas-hotspot";
+      const wrapper = document.createElement('div');
+      wrapper.className = 'midas-hotspot';
 
-      // Anel pulsante
-      const ring = document.createElement("div");
-      ring.className = "ring";
+      const ring = document.createElement('div');
+      ring.className = 'ring';
       wrapper.appendChild(ring);
 
-      // Seta SVG
-      const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-      svg.setAttribute("viewBox", "0 0 24 24");
-      const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
-      path.setAttribute("d", "M12 2L4 14h5v8h6v-8h5z");
+      const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      svg.setAttribute('viewBox', '0 0 24 24');
+      const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      path.setAttribute('d', 'M12 2L4 14h5v8h6v-8h5z');
       svg.appendChild(path);
       wrapper.appendChild(svg);
 
-      // Label
-      const lbl = document.createElement("div");
-      lbl.className = "hs-label";
+      const lbl = document.createElement('div');
+      lbl.className = 'hs-label';
       lbl.textContent = label;
       wrapper.appendChild(lbl);
 
-      wrapper.addEventListener("click", onClickFn);
+      wrapper.addEventListener('click', onClickFn);
       return wrapper;
     }
 
     function loadRoom(roomId) {
-    const room = currentImovel.rooms.find(r => r.id === roomId);
-    if (!room) return;
+      const room = currentImovel.rooms.find(r => r.id === roomId);
+      if (!room) return;
 
-    // Cria overlay de transição
-    let overlay = document.getElementById('transition-overlay');
-    if (!overlay) {
+      let overlay = document.getElementById('transition-overlay');
+      if (!overlay) {
         overlay = document.createElement('div');
         overlay.id = 'transition-overlay';
         overlay.style.cssText = `
-            position: fixed;
-            top: 0; left: 0;
-            width: 100vw; height: 100vh;
-            background: #000;
-            opacity: 0;
-            z-index: 100;
-            pointer-events: none;
-            transition: opacity 0.35s ease;
+          position: fixed;
+          top: 0; left: 0;
+          width: 100vw; height: 100vh;
+          background: #000;
+          opacity: 0;
+          z-index: 100;
+          pointer-events: none;
+          transition: opacity 0.35s ease;
         `;
         document.body.appendChild(overlay);
-    }
+      }
 
-    // Fade out + zoom in
-    const panoramaEl = document.getElementById('panorama');
-    panoramaEl.style.transition = 'transform 0.35s ease, opacity 0.35s ease';
-    panoramaEl.style.transform = 'scale(1.08)';
-    panoramaEl.style.opacity = '0';
-    overlay.style.opacity = '0.85';
+      const panoramaEl = document.getElementById('panorama');
+      panoramaEl.style.transform = 'scale(1.08)';
+      panoramaEl.style.opacity = '0';
+      overlay.style.opacity = '0.85';
 
-    setTimeout(() => {
-        document.getElementById("roomLabel").textContent = room.label;
-        document.querySelectorAll(".room-item").forEach(el => el.classList.remove("active"));
-        const activeItem = document.getElementById("item-" + roomId);
-        if (activeItem) activeItem.classList.add("active");
+      setTimeout(() => {
+        document.getElementById('roomLabel').textContent = room.label;
+        document.querySelectorAll('.room-item').forEach(el => el.classList.remove('active'));
+        const activeItem = document.getElementById('item-' + roomId);
+        if (activeItem) activeItem.classList.add('active');
 
         if (viewer) { viewer.destroy(); viewer = null; }
 
         const hotspots = room.hotspots.map(hs => ({
-            pitch: hs.pitch,
-            yaw: hs.yaw,
-            type: "custom",
-            cssClass: "midas-hs-container",
-            createTooltipFunc: (container) => {
-                const el = criarHotspotElement(hs.label, () => loadRoom(hs.targetId));
-                container.appendChild(el);
-                container.style.width = "64px";
-                container.style.height = "64px";
-                container.style.marginTop = "-32px";
-                container.style.marginLeft = "-32px";
-                container.style.cursor = "pointer";
-            }
+          pitch: hs.pitch,
+          yaw: hs.yaw,
+          type: 'custom',
+          cssClass: 'midas-hs-container',
+          createTooltipFunc: (container) => {
+            const el = criarHotspotElement(hs.label, () => loadRoom(hs.targetId));
+            container.appendChild(el);
+            container.style.width = '64px';
+            container.style.height = '64px';
+            container.style.marginTop = '-32px';
+            container.style.marginLeft = '-32px';
+            container.style.cursor = 'pointer';
+          }
         }));
 
-        viewer = pannellum.viewer("panorama", {
-            type: "equirectangular",
-            panorama: room.image,
-            autoLoad: true,
-            autoRotate: -1.5,
-            compass: false,
-            showFullscreenCtrl: false,
-            showZoomCtrl: false,
-            mouseZoom: true,
-            pitch: room.pitch,
-            yaw: room.yaw,
-            hfov: 100,
-            hotSpots: hotspots,
-            uiText: {
-                loadButtonLabel: "Carregar Tour",
-                loadingLabel: "Carregando...",
-                bylineLabel: "",
-                noPanoramaError: "Imagem não encontrada.",
-                fileAccessError: "Não foi possível carregar a imagem.",
-                malformedURLError: "URL inválida.",
-                genericWebGLError: "Erro ao carregar o visualizador.",
-                textureSizeError: "Imagem muito grande para este dispositivo.",
-                unknownError: "Erro desconhecido."
-            }
+        viewer = pannellum.viewer('panorama', {
+          type: 'equirectangular',
+          panorama: room.image,
+          autoLoad: true,
+          autoRotate: -1.5,
+          compass: false,
+          showFullscreenCtrl: false,
+          showZoomCtrl: false,
+          mouseZoom: true,
+          pitch: room.pitch,
+          yaw: room.yaw,
+          hfov: 100,
+          hotSpots: hotspots,
+          uiText: {
+            loadButtonLabel: 'Carregar Tour',
+            loadingLabel: 'Carregando...',
+            bylineLabel: '',
+            noPanoramaError: 'Imagem não encontrada.',
+            fileAccessError: 'Não foi possível carregar a imagem.',
+            malformedURLError: 'URL inválida.',
+            genericWebGLError: 'Erro ao carregar o visualizador.',
+            textureSizeError: 'Imagem muito grande para este dispositivo.',
+            unknownError: 'Erro desconhecido.'
+          }
         });
 
-        // Fade in após carregar
         viewer.on('load', () => {
-            panoramaEl.style.transform = 'scale(1)';
-            panoramaEl.style.opacity = '1';
-            overlay.style.opacity = '0';
+          panoramaEl.style.transform = 'scale(1)';
+          panoramaEl.style.opacity = '1';
+          overlay.style.opacity = '0';
         });
 
-    }, 350);
-}
-      }));
-
-      viewer = pannellum.viewer("panorama", {
-        type: "equirectangular",
-        panorama: room.image,
-        autoLoad: true,
-        autoRotate: -1.5,
-        compass: false,
-        showFullscreenCtrl: false,
-        showZoomCtrl: false,
-        mouseZoom: true,
-        pitch: room.pitch,
-        yaw: room.yaw,
-        hfov: 100,
-        hotSpots: hotspots,
-        uiText: {
-          loadButtonLabel: "Carregar Tour",
-          loadingLabel: "Carregando...",
-          bylineLabel: "",
-          noPanoramaError: "Imagem não encontrada.",
-          fileAccessError: "Não foi possível carregar a imagem.",
-          malformedURLError: "URL inválida.",
-          genericWebGLError: "Erro ao carregar o visualizador.",
-          textureSizeError: "Imagem muito grande para este dispositivo.",
-          unknownError: "Erro desconhecido."
-        }
-      });
+      }, 350);
     }
 
     function toggleSidebar() {
-      document.getElementById("sidebar").classList.toggle("hidden");
+      document.getElementById('sidebar').classList.toggle('hidden');
     }
 
     loadImovel(getImovelId());
