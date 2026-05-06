@@ -515,32 +515,93 @@
     }
 
     function loadRoom(roomId) {
-      const room = currentImovel.rooms.find(r => r.id === roomId);
-      if (!room) return;
+    const room = currentImovel.rooms.find(r => r.id === roomId);
+    if (!room) return;
 
-      document.getElementById("roomLabel").textContent = room.label;
-      document.querySelectorAll(".room-item").forEach(el => el.classList.remove("active"));
-      const activeItem = document.getElementById("item-" + roomId);
-      if (activeItem) activeItem.classList.add("active");
+    // Cria overlay de transição
+    let overlay = document.getElementById('transition-overlay');
+    if (!overlay) {
+        overlay = document.createElement('div');
+        overlay.id = 'transition-overlay';
+        overlay.style.cssText = `
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            background: #000;
+            opacity: 0;
+            z-index: 100;
+            pointer-events: none;
+            transition: opacity 0.35s ease;
+        `;
+        document.body.appendChild(overlay);
+    }
 
-      if (viewer) { viewer.destroy(); viewer = null; }
+    // Fade out + zoom in
+    const panoramaEl = document.getElementById('panorama');
+    panoramaEl.style.transition = 'transform 0.35s ease, opacity 0.35s ease';
+    panoramaEl.style.transform = 'scale(1.08)';
+    panoramaEl.style.opacity = '0';
+    overlay.style.opacity = '0.85';
 
-      // Monta hotspots usando createTooltipFunc para injetar o elemento customizado
-      const hotspots = room.hotspots.map(hs => ({
-        pitch: hs.pitch,
-        yaw: hs.yaw,
-        type: "custom",
-        cssClass: "midas-hs-container",
-        createTooltipFunc: (container) => {
-          const el = criarHotspotElement(hs.label, () => loadRoom(hs.targetId));
-          container.appendChild(el);
-          // Ajusta o container para não interferir no posicionamento
-          container.style.width = "64px";
-          container.style.height = "64px";
-          container.style.marginTop = "-32px";
-          container.style.marginLeft = "-32px";
-          container.style.cursor = "pointer";
-        }
+    setTimeout(() => {
+        document.getElementById("roomLabel").textContent = room.label;
+        document.querySelectorAll(".room-item").forEach(el => el.classList.remove("active"));
+        const activeItem = document.getElementById("item-" + roomId);
+        if (activeItem) activeItem.classList.add("active");
+
+        if (viewer) { viewer.destroy(); viewer = null; }
+
+        const hotspots = room.hotspots.map(hs => ({
+            pitch: hs.pitch,
+            yaw: hs.yaw,
+            type: "custom",
+            cssClass: "midas-hs-container",
+            createTooltipFunc: (container) => {
+                const el = criarHotspotElement(hs.label, () => loadRoom(hs.targetId));
+                container.appendChild(el);
+                container.style.width = "64px";
+                container.style.height = "64px";
+                container.style.marginTop = "-32px";
+                container.style.marginLeft = "-32px";
+                container.style.cursor = "pointer";
+            }
+        }));
+
+        viewer = pannellum.viewer("panorama", {
+            type: "equirectangular",
+            panorama: room.image,
+            autoLoad: true,
+            autoRotate: -1.5,
+            compass: false,
+            showFullscreenCtrl: false,
+            showZoomCtrl: false,
+            mouseZoom: true,
+            pitch: room.pitch,
+            yaw: room.yaw,
+            hfov: 100,
+            hotSpots: hotspots,
+            uiText: {
+                loadButtonLabel: "Carregar Tour",
+                loadingLabel: "Carregando...",
+                bylineLabel: "",
+                noPanoramaError: "Imagem não encontrada.",
+                fileAccessError: "Não foi possível carregar a imagem.",
+                malformedURLError: "URL inválida.",
+                genericWebGLError: "Erro ao carregar o visualizador.",
+                textureSizeError: "Imagem muito grande para este dispositivo.",
+                unknownError: "Erro desconhecido."
+            }
+        });
+
+        // Fade in após carregar
+        viewer.on('load', () => {
+            panoramaEl.style.transform = 'scale(1)';
+            panoramaEl.style.opacity = '1';
+            overlay.style.opacity = '0';
+        });
+
+    }, 350);
+}
       }));
 
       viewer = pannellum.viewer("panorama", {
