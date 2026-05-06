@@ -341,9 +341,9 @@
     // CONFIGURAÇÃO DOS IMÓVEIS
     // ═══════════════════════════════════════════════════
     const imoveis = {
-      'escritorio-midas': {
+    'escritorio-midas': {
     name: 'Escritório Midas',
-    location: 'Belém, PA',
+    location: 'Castanhal, PA',
     whatsapp: '559100000000',
     rooms: [
         {
@@ -352,7 +352,10 @@
             image: 'IMG_6649.JPG.jpeg',
             pitch: 0,
             yaw: 0,
-            hotspots: []
+            hotspots: [
+                { targetId: 'sala-principal', pitch: -8, yaw: 90, label: 'Sala Principal' },
+                { targetId: 'area-trabalho', pitch: -8, yaw: 270, label: 'Área de Trabalho' }
+            ]
         },
         {
             id: 'sala-principal',
@@ -360,7 +363,10 @@
             image: 'IMG_6650.JPG.jpeg',
             pitch: 0,
             yaw: 0,
-            hotspots: []
+            hotspots: [
+                { targetId: 'recepcao', pitch: -8, yaw: 270, label: 'Recepção' },
+                { targetId: 'area-trabalho', pitch: -8, yaw: 90, label: 'Área de Trabalho' }
+            ]
         },
         {
             id: 'area-trabalho',
@@ -368,7 +374,10 @@
             image: 'IMG_6651.JPG.jpeg',
             pitch: 0,
             yaw: 0,
-            hotspots: []
+            hotspots: [
+                { targetId: 'recepcao', pitch: -8, yaw: 180, label: 'Recepção' },
+                { targetId: 'sala-principal', pitch: -8, yaw: 0, label: 'Sala Principal' }
+            ]
         }
     ]
 },
